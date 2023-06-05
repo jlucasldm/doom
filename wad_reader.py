@@ -19,7 +19,7 @@ class WADReader:
         self.wad_file = open(wad_path, 'rb')    # Abrir o arquivo WAD em modo binário
         self.header = self.read_header()    # Ler o header do arquivo WAD
         self.directory = self.read_directory()  # Ler o diretório de lumps do arquivo WAD
-        print('\n', self.header)    # Imprimir o header do arquivo WAD
+        # print('\n', self.header)    # Imprimir o header do arquivo WAD
         # [print('\n', lump) for lump in self.directory]  # Imprimir o diretório de lumps do arquivo WAD
 
     def read_linedef(self, offset):
@@ -35,9 +35,6 @@ class WADReader:
         linedef.back_sidedef_id = read_2_bytes(offset=offset + 12, byte_format='h')
         return linedef
 
-
-
-
     def read_vertex(self, offset):
         # 4 bytes = 2h + 2h
         x = self.read_2_bytes(offset=offset, byte_format='h')
@@ -47,7 +44,7 @@ class WADReader:
     # Ler o diretório de lumps do arquivo WAD
     def read_directory(self):
         directory = []
-        for i in range(self.header['lump_count']): # Para cada lump no diretório de lumps
+        for i in range(self.header['lump_count']):  # Para cada lump no diretório de lumps
             offset = self.header['info_table_offset'] + i * 16
             # Cada lump é definido por 16 bytes, sendo 4 bytes para o offset do lump,
             # 4 bytes para o tamanho do lump e 8 bytes para o nome do lump
