@@ -43,6 +43,8 @@
 from wad_data import WADData
 from settings import *
 from map_renderer import MapRenderer
+from player import Player
+from bsp import BSP
 import pygame as pg
 import sys
 
@@ -66,16 +68,21 @@ class DoomEngine:
         # WAD e o nome do mapa.
         self.map_renderer = MapRenderer(self)           # Instanciar a classe MapRenderer, passando a instância da
         # classe DoomEngine.
+        self.player = Player(self)                      # Instanciar a classe Player, passando a instância da classe
+        # DoomEngine.
+        self.bsp = BSP(self)                            # Instanciar a classe BSP, passando a instância da classe
+        # DoomEngine.
 
     def update(self):
-        # O método update é chamado a cada frame do jogo.
+        self.player.update()  # O método update da classe Player é chamado a cada frame do jogo.
+        self.bsp.update()     # O método update da classe BSP é chamado a cada frame do jogo.
         self.dt = self.clock.tick()
-        pg.display.flip()   # Atualizar a tela do jogo.
         pg.display.set_caption(f'Doom Clone - FPS: {self.clock.get_fps():.2f}')  # Atualizar o título da janela do jogo.
 
     def draw(self):
         self.screen.fill('black')   # Preencher a tela do jogo com a cor preta.
         self.map_renderer.draw()    # O método draw da classe MapRenderer é chamado a cada frame do jogo.
+        pg.display.flip()  # Atualizar a tela do jogo.
 
     def check_events(self):
         for e in pg.event.get():

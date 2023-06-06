@@ -3,7 +3,7 @@
 
 # A biblioteca struct é utilizada para ler dados binários
 import struct
-from pygame.math import Vector2
+from pygame.math import Vector2 as vec2
 from data_types import *
 
 # Cabe fazer algumas observações a respeito de um arquivo WAD. Um arquivo WAD é composto por 3 partes:
@@ -22,6 +22,71 @@ class WADReader:
         # print('\n', self.header)    # Imprimir o header do arquivo WAD
         # [print('\n', lump) for lump in self.directory]  # Imprimir o diretório de lumps do arquivo WAD
 
+
+    def read_thing(self, offset):
+        # 10 bytes = 2h * 2 + 2H * 3
+        read_2_bytes = self.read_2_bytes
+
+        thing = Thing()
+        x = read_2_bytes(offset=offset, byte_format='h')
+        y = read_2_bytes(offset=offset + 2, byte_format='h')
+        thing.angle = read_2_bytes(offset=offset + 4, byte_format='h')
+        thing.type = read_2_bytes(offset=offset + 6, byte_format='h')
+        thing.flags = read_2_bytes(offset=offset + 8, byte_format='h')
+        thing.pos = vec2(x, y)
+
+        return thing
+
+    def read_segment(self, offset):
+        # 12 bytes = 2h * 6
+        read_2_bytes = self.read_2_bytes
+
+        seg = Seg()
+        seg.start_vertex_id = read_2_bytes(offset=offset, byte_format='h')
+        seg.end_vertex_id = read_2_bytes(offset=offset + 2, byte_format='h')
+        seg.angle = read_2_bytes(offset=offset + 4, byte_format='h')
+        seg.linedef_id = read_2_bytes(offset=offset + 6, byte_format='h')
+        seg.direction = read_2_bytes(offset=offset + 8, byte_format='h')
+        seg.offset = read_2_bytes(offset=offset + 10, byte_format='h')
+
+        return seg
+
+    def read_subsector(self, offset):
+        # 4 bytes = 2h * 2
+        read_2_bytes = self.read_2_bytes
+
+        subsector = Subsector()
+        subsector.seg_count = read_2_bytes(offset=offset, byte_format='h')
+        subsector.first_seg_id = read_2_bytes(offset=offset + 2, byte_format='h')
+
+        return subsector
+
+    def read_node(self, offset):
+        # 28 bytes = 2h * 12 + 2h * 2
+        read_2_bytes = self.read_2_bytes
+
+        node = Node()
+        node.x_partition = read_2_bytes(offset=offset, byte_format='h')
+        node.y_partition = read_2_bytes(offset=offset + 2, byte_format='h')
+        node.dx_partition = read_2_bytes(offset=offset + 4, byte_format='h')
+        node.dy_partition = read_2_bytes(offset=offset + 6, byte_format='h')
+
+        node.bbox['front'].top = read_2_bytes(offset=offset + 8, byte_format='h')
+        node.bbox['front'].bottom = read_2_bytes(offset=offset + 10, byte_format='h')
+        node.bbox['front'].left = read_2_bytes(offset=offset + 12, byte_format='h')
+        node.bbox['front'].right = read_2_bytes(offset=offset + 14, byte_format='h')
+
+        node.bbox['back'].top = read_2_bytes(offset=offset + 16, byte_format='h')
+        node.bbox['back'].bottom = read_2_bytes(offset=offset + 18, byte_format='h')
+        node.bbox['back'].left = read_2_bytes(offset=offset + 20, byte_format='h')
+        node.bbox['back'].right = read_2_bytes(offset=offset + 22, byte_format='h')
+
+        node.front_child_id = read_2_bytes(offset=offset + 24, byte_format='H')
+        node.back_child_id = read_2_bytes(offset=offset + 26, byte_format='H')
+
+        return node
+
+
     def read_linedef(self, offset):
         read_2_bytes = self.read_2_bytes
 
@@ -39,7 +104,7 @@ class WADReader:
         # 4 bytes = 2h + 2h
         x = self.read_2_bytes(offset=offset, byte_format='h')
         y = self.read_2_bytes(offset=offset + 2, byte_format='h')
-        return Vector2(x, y)
+        return vec2(x, y)
 
     # Ler o diretório de lumps do arquivo WAD
     def read_directory(self):
