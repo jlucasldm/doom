@@ -19,8 +19,8 @@ class WADReader:
         self.wad_file = open(wad_path, 'rb')    # Abrir o arquivo WAD em modo binário
         self.header = self.read_header()    # Ler o header do arquivo WAD
         self.directory = self.read_directory()  # Ler o diretório de lumps do arquivo WAD
-        print('\n', self.header)    # Imprimir o header do arquivo WAD
-        [print('\n', lump) for lump in self.directory]  # Imprimir o diretório de lumps do arquivo WAD
+        # print('\n', self.header)    # Imprimir o header do arquivo WAD
+        # [print('\n', lump) for lump in self.directory]  # Imprimir o diretório de lumps do arquivo WAD
 
 
     def read_thing(self, offset):
@@ -127,9 +127,9 @@ class WADReader:
     def read_header(self):
         return {
             'wad_type': self.read_string(offset=0, num_bytes=4),    # Tipo de arquivo WAD
-            'lump_count': self.read_4_bytes(offset=4),              # Número de lumps
-            'info_table_offset': self.read_4_bytes(offset=8)        # Inteiro de 4 bytes que representa o ponteiro para
-                                                                    # a localização do diretório de lumps
+            'lump_count': self.read_4_bytes(offset=4),  # Número de lumps
+            'info_table_offset': self.read_4_bytes(offset=8)    # Inteiro de 4 bytes que representa o ponteiro para a
+                                                                # localização do diretório de lumps
         }
 
     def read_1_byte(self, offset, byte_format):

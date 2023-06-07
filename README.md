@@ -71,11 +71,3 @@ O offset do lump é o offset do lump no arquivo WAD. O tamanho do lump é o tama
 do lump em bytes. O nome do lump é o nome do lump. O nome do lump é composto por
 8 caracteres ASCII, podendo ser preenchido com espaços em branco.
 
-#### Data
-O data é o segmento de dados do arquivo WAD. Ele contém os dados dos lumps. O offset
-do data é o offset do primeiro lump no data. O tamanho do data é o tamanho do data
-em bytes.
-
-### Estrutura do projeto
-No momento, o projeto está estruturado da seguinte forma:
-[implemento esse trecho em outro momento]
