@@ -22,6 +22,7 @@ class DoomEngine:
     # O método on_init cria uma instância da classe WADData, que é responsável por
     # ler os dados do arquivo WAD.
     def on_init(self):
+
         self.wad_data = WADData(self, map_name='E1M1')  # Instanciar a classe WADData, passando o caminho do arquivo
         # WAD e o nome do mapa.
         self.map_renderer = MapRenderer(self)           # Instanciar a classe MapRenderer, passando a instância da

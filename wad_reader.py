@@ -6,6 +6,7 @@ import struct
 from pygame.math import Vector2 as vec2
 from data_types import *
 
+
 # Cabe fazer algumas observações a respeito de um arquivo WAD. Um arquivo WAD é composto por 3 partes:
 # 1. Header
 # 2. Lump Data
@@ -16,12 +17,11 @@ from data_types import *
 
 class WADReader:
     def __init__(self, wad_path):
-        self.wad_file = open(wad_path, 'rb')    # Abrir o arquivo WAD em modo binário
-        self.header = self.read_header()    # Ler o header do arquivo WAD
+        self.wad_file = open(wad_path, 'rb')  # Abrir o arquivo WAD em modo binário
+        self.header = self.read_header()  # Ler o header do arquivo WAD
         self.directory = self.read_directory()  # Ler o diretório de lumps do arquivo WAD
-        print('\n', self.header)    # Imprimir o header do arquivo WAD
+        print('\n', self.header)  # Imprimir o header do arquivo WAD
         [print('\n', lump) for lump in self.directory]  # Imprimir o diretório de lumps do arquivo WAD
-
 
     def read_thing(self, offset):
         # 10 bytes = 2h * 2 + 2H * 3
@@ -86,7 +86,6 @@ class WADReader:
 
         return node
 
-
     def read_linedef(self, offset):
         read_2_bytes = self.read_2_bytes
 
@@ -126,10 +125,10 @@ class WADReader:
     # 4 bytes para o offset da info table.
     def read_header(self):
         return {
-            'wad_type': self.read_string(offset=0, num_bytes=4),    # Tipo de arquivo WAD
-            'lump_count': self.read_4_bytes(offset=4),              # Número de lumps
-            'info_table_offset': self.read_4_bytes(offset=8)        # Inteiro de 4 bytes que representa o ponteiro para
-                                                                    # a localização do diretório de lumps
+            'wad_type': self.read_string(offset=0, num_bytes=4),  # Tipo de arquivo WAD
+            'lump_count': self.read_4_bytes(offset=4),  # Número de lumps
+            'info_table_offset': self.read_4_bytes(offset=8)  # Inteiro de 4 bytes que representa o ponteiro para
+            # a localização do diretório de lumps
         }
 
     def read_1_byte(self, offset, byte_format):
@@ -155,9 +154,9 @@ class WADReader:
     # Método que irá ler os dados binários do arquivo WAD dado um offset, um número de bytes
     # a ser lido e um formato de bytes
     def read_bytes(self, offset, num_bytes, byte_format):
-        self.wad_file.seek(offset)   # Ir para o offset especificado, em função da primeira posição do arquivo
+        self.wad_file.seek(offset)  # Ir para o offset especificado, em função da primeira posição do arquivo
         buffer = self.wad_file.read(num_bytes)  # Ler o número de bytes especificado
-        return struct.unpack(byte_format, buffer)   # Desempacotar os bytes lidos de acordo com o formato especificado
+        return struct.unpack(byte_format, buffer)  # Desempacotar os bytes lidos de acordo com o formato especificado
 
     # Método para fecha o arquivo WAD
     def close(self):
